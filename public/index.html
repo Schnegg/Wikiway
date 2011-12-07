@@ -1,0 +1,48 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">google.load("jquery", "1.4.4");</script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script>
+$(function() {
+	var socket = io.connect();
+	socket.on('connect', function() {
+		console.log('connect');
+	});
+
+	socket.on('message', function(msg) {
+		console.log(msg);
+		document.getElementById('main').innerHTML += msg;
+	});
+	
+	socket.on('winning', function() {
+		alert("Gewonnen");
+	});	
+
+	socket.on('disconnect', function(){
+		console.log('disconnect');
+	});
+	
+	socket.on('json', function(msg){
+		;
+	});
+		
+	
+    $('#form').submit(function() {
+        var message = $('#message');
+        socket.send(message.val());
+        message.attr('value', '');
+        return false;
+    });
+	
+	$('#json').click(function() {
+		var json = 'sended json';
+		socket.emit('json', { my: json });
+	});
+});	
+</script>
+<h1>Jamann</h1>
+<div id="main"></div>
+<form action="" id="form">
+  <input type="text" name="message" id="message" />
+  <input type="submit" value="Nachricht senden" />
+</form>
+<input type="button" id="json" value="Json Senden" />
