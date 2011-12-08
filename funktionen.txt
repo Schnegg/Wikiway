@@ -1,0 +1,6 @@
+Wikiway funktionen
+
+Server:
+----------
+
+logon: ein neuer socketclient wird erstellt, eine spielerid wird zurückgegeben
