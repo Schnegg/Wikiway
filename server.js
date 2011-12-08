@@ -11,24 +11,22 @@ server.get('/', function (req, res) {
 });
 
 io.sockets.on('connection', function(client) {
-    console.log('connected');
-    client.broadcast.send('... new client connected.');
+
+	client.emit('getUsername');
+
     client.on('message', function(msg) {
-        console.log(msg);
-        client.send(msg);
-        client.broadcast.send(msg);
-		if(msg == "123"){
-			client.broadcast.emit('winning');
-		}
+        client.send("<b>You</b>: "+msg);
+        client.broadcast.send("<b>"+client.username+"</b>: "+msg);
     });
 	
-    client.on('json', function(data) {
-        client.broadcast.send(data);
-    });	
+    client.on('setUsername', function(username) {
+		client.username = username;
+        client.broadcast.send("<b>"+username+" ist dem Chat beigetreten.</b>");
+    });
 	
     client.on('disconnect', function() {
-        console.log('disconnect');
+        client.broadcast.send("<b>"+client.username+" hat den Chat verlassen.</b>");
     });
 });
 
-server.listen(80);
+server.listen(port);

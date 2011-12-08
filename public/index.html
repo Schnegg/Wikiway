@@ -10,19 +10,19 @@ $(function() {
 
 	socket.on('message', function(msg) {
 		console.log(msg);
-		document.getElementById('main').innerHTML += msg;
+		document.getElementById('main').innerHTML += msg+"<br/>";
 	});
 	
-	socket.on('winning', function() {
-		alert("Gewonnen");
-	});	
-
 	socket.on('disconnect', function(){
 		console.log('disconnect');
 	});
 	
-	socket.on('json', function(msg){
-		;
+	socket.on('getUsername', function(msg){
+	   var name=prompt("Username?","");
+	   if(name==""||name==null)
+		  history.back();
+	   else
+		  socket.emit('setUsername', name); 
 	});
 		
 	
@@ -32,17 +32,11 @@ $(function() {
         message.attr('value', '');
         return false;
     });
-	
-	$('#json').click(function() {
-		var json = 'sended json';
-		socket.emit('json', { my: json });
-	});
 });	
 </script>
-<h1>Jamann</h1>
-<div id="main"></div>
+<h1>Chat</h1>
 <form action="" id="form">
   <input type="text" name="message" id="message" />
   <input type="submit" value="Nachricht senden" />
 </form>
-<input type="button" id="json" value="Json Senden" />
+<div id="main"></div>
